@@ -2,14 +2,14 @@
 Simple user-definable simulator rendered in real time. no strings attached, except one ...
 ## Description
 Includes a ghetto 3D Barnes/Hut implementation with option to set open angle < 0.5. Improves computational complexity but force calculation accuracy has been justly reduced. Good for larger scale computations with cheap hardware. If open angle > 0.5, algorithm returns back into traditional forcestep calculations.
-## Results
+## Gallery
 
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%231.png "artifical spiral arms")
-two artifical arms added to bulge.
+### Two artifical arms added to bulge. Resembles Sa type. 
 
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%232.png "15000 particle galaxy")
-spiral arm formation can be seen here. Would have <1 fps if I used additive blending and smoother particle rendering here
+### Spiral arm formation can be seen here. 15,000+ particles with additive blending. Sb type.
 
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%233.png "rectangular gravity")
-who knew rectanglular clusters are attracted to one another?
+### Who knew rectanglular clusters can attract one another?
 
