@@ -5,11 +5,11 @@ Includes a ghetto 3D Barnes/Hut implementation with option to set open angle < 0
 ## Gallery
 
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%231.png "artifical spiral arms")
-### Two artifical arms added to bulge. Resembles Sa type. 
+#### Two artifical arms added to bulge. Resembles Sa type. 
 
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%232.png "15000 particle galaxy")
-### Spiral arm formation can be seen here. 15,000+ particles with additive blending. Sb type.
+#### Spiral arm formation can be seen here. 15,000+ particles with additive blending. Sb type.
 
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%233.png "rectangular gravity")
-### Who knew rectanglular clusters can attract one another?
+#### Who knew rectanglular clusters can attract one another?
 
