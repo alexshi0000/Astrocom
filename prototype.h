@@ -149,19 +149,61 @@ void kuzmin_disk(bool bulge, double mass, int PARTICLE_COUNT, double radius, flo
 	}
 }
 
+void heat_map_kuzmin_dist(){
+	if(bulge){
+		Particle *q = new Particle(1e33,0+x1,0+y1,0+z1,0,0,0);
+		q->set_color(0,0,0);
+		q->black_hole = true;
+	}
+	for(unsigned int i = 0; i < PARTICLE_COUNT; i++){
+		double x = ((double)rand()/(double)RAND_MAX) * 2.0 * radius - radius;
+		double y = ((double)rand()/(double)RAND_MAX) * 2.0 * sqrt(radius*radius - x*x) - sqrt(radius*radius - x*x);
+		double z = 0;
+		if(bulge)
+			z = ((double)rand()/(double)RAND_MAX) * 0.1 * sqrt(radius*radius - x*x) - 0.1 * sqrt(radius*radius - x*x);
+		else
+			z = ((double)rand()/(double)RAND_MAX) * 0.05 * sqrt(radius*radius - x*x) - 0.05 * sqrt(radius*radius - x*x);
+		double m = y / x;
+		m = -1/m;
+		double b = y - x*m;
+		if(y > 0){
+			Vect *velocity = new Vect(-1, (x-1)*m + b - y, 0);
+			velocity -> scalar(
+				sqrt((GC * (1e33)) /
+					sqrt(x*x + y*y + z*z))
+			); 
+			Particle *q = new Particle(2e19*mass, x+x1, y+y1, z+z1, velocity -> i, velocity -> j, velocity -> k);
+			q -> set_color(red,green,blue);
+		} 
+		else{
+			Vect *velocity = new Vect(1, (x+1)*m + b - y, 0);
+			velocity -> scalar(
+				sqrt((GC * (1e33)) /
+					sqrt(x*x + y*y + z*z))
+			); 
+			Particle *q = new Particle(2e19*mass, x+x1, y+y1, z+z1, velocity -> i, velocity -> j, velocity -> k);
+			q -> set_color(red,green,blue);
+		}
+	}
+}
+
+void galaxy_test1(){
+
+}
+
 void galaxy_test0(){
 	//kuzmin_disk(true,1e3,500,1e4*AU,1,1,1,0,0,0);
-	kuzmin_disk(true,1,25000,2e4*AU,1,1,1,0,0,0);
-	particle_radius = 0.004;
-	alpha = 0.333;
+	kuzmin_disk(true,1,100000,2e4*AU,1,1,1,0,0,0);
+	particle_radius = 0.002;
+	alpha = 0.2;
 	render_quality = 4;
 	theta = 10000;
-	time_step = 10e9;
+	time_step = 5e9;
 	width = 6e6*AU;
-	delay = 5;
+	delay = 0;
 	ignore_width = 5e6*AU;
 	debug_lower_bound = 0;
-	debug_upper_bound = 30;
+	debug_upper_bound = 10;
 	time_unit = "y";
 }
 
