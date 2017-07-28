@@ -151,13 +151,15 @@ void kuzmin_disk(bool bulge, double mass, int PARTICLE_COUNT, double radius, flo
 
 void galaxy_test0(){
 	//kuzmin_disk(true,1e3,500,1e4*AU,1,1,1,0,0,0);
-	kuzmin_disk(true,1,10000,2e4*AU,1,1,1,0,0,0);
-	particle_radius = 0.003;
+	kuzmin_disk(true,1,25000,2e4*AU,1,1,1,0,0,0);
+	particle_radius = 0.004;
+	alpha = 0.333;
+	render_quality = 4;
 	theta = 10000;
-	time_step = 1e9;
-	width = 5e6*AU;
-	delay = 10;
-	ignore_width = 4e6*AU;
+	time_step = 10e9;
+	width = 6e6*AU;
+	delay = 5;
+	ignore_width = 5e6*AU;
 	debug_lower_bound = 0;
 	debug_upper_bound = 30;
 	time_unit = "y";

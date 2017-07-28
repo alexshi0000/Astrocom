@@ -116,6 +116,7 @@ bool in_octant(Node *n, Particle *p){
 
 void particle_update_traversal(Node *focus, Particle *body);
 void particle_update(){
+	#pragma omp parallel for num_threads(2)
 	for(int i = 0; i < field.size(); i++){
 		Particle *p = field.at(i);
 		if(sqrt(pow(p->x-root->x,2) + pow(p->y-root->y,2) + pow(p->z-root->z,2)) > ignore_width && ignore_width > 0){
@@ -388,7 +389,7 @@ void display_func(){
 			y1 = render -> y / (root -> width * zoom);
 			z1 = render -> z / (root -> width * zoom);
 				//divided by camera dimensions
-			glColor4f(render -> color[0], render -> color[1], render -> color[2], 1);
+			glColor4f(render -> color[0], render -> color[1], render -> color[2], alpha);
 			if(render -> ignore)
 				glColor4f(0,0,0,0);
 			glPushMatrix ();

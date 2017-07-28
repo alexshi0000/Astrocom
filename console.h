@@ -57,112 +57,114 @@ void display_help_options(){
 	cout << "    - debug_tree()" << endl;
 	cout << "    - peek(id)" << endl;
 	cout << "    - find(id,R,G,B)" << endl;
-	cout << endl;
-	cout << endl;
 }
 
 void process(){
-	//do something, called after enter is pressed
-	cout << ">> " << processed << endl;
-	if(processed.compare("quit()") == 0 || processed.compare("exit()") == 0)
-		exit(0);
-	else if(processed.compare("clear()") == 0){
-		for(int i = 0; i < 28; i++)
-			cout << endl;
-	}
-	else if(processed.compare("debug()") == 0)
-			//debug mode must be entered in order to turn on debug tree which is a viewtype
-		debug_mode = !debug_mode;
-	else if(debug_mode && processed.compare("debug_tree()") == 0)
-		debug_tree = !debug_tree;
-	else if(processed.compare("help()") == 0)
-		display_help_options();
-	else{
-		try{
-			if(processed.find("set_time_unit") != string::npos){
-				time_unit = substring(processed, processed.find("(")+1, processed.find(")"));
-			}
-			else if(processed.find("add") != string::npos){
-				tokenize_current_process(processed.find("("), processed.find(")"));
-				double mass = atof(tokens.at(0).c_str());
-				double x = atof(tokens.at(1).c_str()), y = atof(tokens.at(2).c_str()), z = atof(tokens.at(3).c_str());
-				double v_i = atof(tokens.at(4).c_str()), v_j = atof(tokens.at(5).c_str()), v_k = atof(tokens.at(6).c_str());
-				cout << mass <<" "<< x <<" "<< y <<" "<< z <<" "<< v_i <<" "<< v_j <<" "<< v_k << endl;
-				new Particle(mass,x,y,z,v_i,v_j,v_k);
-			}
-			else if(processed.find("set_width") != string::npos){
-				string curr = substring(processed, processed.find("(")+1, processed.find(")"));
-				root -> width = atof(curr.c_str());
-				root -> height = root -> width;
-				root -> length = root -> width;
-				width = root -> width;
-			}
-			else if(processed.find("simulate") != string::npos){
-				int id = stoi(substring( processed, processed.find("(")+1, processed.find(")")));
-				if(id == 1)
-					solar_system_test();
-				else if(id == 2)
-					center_of_mass_test();
-				else if(id == 3)
-					galaxy_test();
-				else if(id == 4)
-					galaxy_test0();
-				else if(id == 5)
-					cube_test();
-				else
-					cout << ">> no simulation with corresponding id found" << endl;
-			}
-			else if(processed.find("set_color_all") != string::npos){
-				tokenize_current_process(processed.find("("), processed.find(")"));
-				if(field.size() > 0){
-					float R = atof(tokens.at(0).c_str());
-					float G = atof(tokens.at(1).c_str());
-					float B = atof(tokens.at(2).c_str());
+	#pragma omp task
+	{
+		//do something, called after enter is pressed
+		cout << ">> " << processed << endl;
+		if(processed.compare("quit()") == 0 || processed.compare("exit()") == 0)
+			exit(0);
+		else if(processed.compare("clear()") == 0){
+			for(int i = 0; i < 28; i++)
+				cout << endl;
+		}
+		else if(processed.compare("debug()") == 0)
+				//debug mode must be entered in order to turn on debug tree which is a viewtype
+			debug_mode = !debug_mode;
+		else if(debug_mode && processed.compare("debug_tree()") == 0)
+			debug_tree = !debug_tree;
+		else if(processed.compare("help()") == 0)
+			display_help_options();
+		else{
+			try{
+				if(processed.find("set_time_unit") != string::npos){
+					time_unit = substring(processed, processed.find("(")+1, processed.find(")"));
+				}
+				else if(processed.find("add") != string::npos){
+					tokenize_current_process(processed.find("("), processed.find(")"));
+					double mass = atof(tokens.at(0).c_str());
+					double x = atof(tokens.at(1).c_str()), y = atof(tokens.at(2).c_str()), z = atof(tokens.at(3).c_str());
+					double v_i = atof(tokens.at(4).c_str()), v_j = atof(tokens.at(5).c_str()), v_k = atof(tokens.at(6).c_str());
+					cout << mass <<" "<< x <<" "<< y <<" "<< z <<" "<< v_i <<" "<< v_j <<" "<< v_k << endl;
+					new Particle(mass,x,y,z,v_i,v_j,v_k);
+				}
+				else if(processed.find("set_width") != string::npos){
+					string curr = substring(processed, processed.find("(")+1, processed.find(")"));
+					root -> width = atof(curr.c_str());
+					root -> height = root -> width;
+					root -> length = root -> width;
+					width = root -> width;
+				}
+				else if(processed.find("simulate") != string::npos){
+					int id = stoi(substring( processed, processed.find("(")+1, processed.find(")")));
+					if(id == 1)
+						solar_system_test();
+					else if(id == 2)
+						center_of_mass_test();
+					else if(id == 3)
+						galaxy_test();
+					else if(id == 4)
+						galaxy_test0();
+					else if(id == 5)
+						cube_test();
+					else
+						cout << ">> no simulation with corresponding id found" << endl;
+				}
+				else if(processed.find("set_color_all") != string::npos){
+					tokenize_current_process(processed.find("("), processed.find(")"));
+					if(field.size() > 0){
+						float R = atof(tokens.at(0).c_str());
+						float G = atof(tokens.at(1).c_str());
+						float B = atof(tokens.at(2).c_str());
+						for(int i = 0; i < field.size(); i++)
+							field.at(i) -> set_color(R,G,B);
+					}
+				}
+				else if(processed.find("set_color") != string::npos){
+						//same as the above but only changes color for the lastest particle
+					tokenize_current_process(processed.find("("), processed.find(")"));
+					if(field.size() > 0){
+						Particle *p = field.at(field.size()-1);
+						float R = atof(tokens.at(0).c_str());
+						float G = atof(tokens.at(1).c_str());
+						float B = atof(tokens.at(2).c_str());
+						p -> set_color(R,G,B);
+					}
+				}
+				else if(processed.find("set_ignore_width") != string::npos){
+					ignore_width = atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
 					for(int i = 0; i < field.size(); i++)
-						field.at(i) -> set_color(R,G,B);
+						field.at(i) -> ignore = false;
+							//reset the ingore flag to false
 				}
-			}
-			else if(processed.find("set_color") != string::npos){
-					//same as the above but only changes color for the lastest particle
-				tokenize_current_process(processed.find("("), processed.find(")"));
-				if(field.size() > 0){
-					Particle *p = field.at(field.size()-1);
-					float R = atof(tokens.at(0).c_str());
-					float G = atof(tokens.at(1).c_str());
-					float B = atof(tokens.at(2).c_str());
-					p -> set_color(R,G,B);
+				else if(processed.find("set_time_step") != string::npos){
+					time_step = std::atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
 				}
+				else if(processed.find("set_radius") != string::npos){
+					particle_radius = std::atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
+				}
+				else if(processed.find("set_delay") != string::npos){
+					delay = std::stoi(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
+						//integer value
+				}
+				else if(processed.find("set_theta") != string::npos){
+					theta = std::atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
+				}
+				else if(processed.find("set_debug_upper_bound") != string::npos){
+					debug_upper_bound = std::stoi(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
+				}
+				else if(processed.find("set_debug_lower_bound") != string::npos){
+					debug_lower_bound = std::stoi(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
+				}
+				else if(processed.find("clear_particles") != string::npos){
+					field.clear();
+					N = 0;
+				}
+			} catch (int e){
+				cout << ">> invalid command" << endl;
 			}
-			else if(processed.find("set_ignore_width") != string::npos){
-				ignore_width = atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-				for(int i = 0; i < field.size(); i++)
-					field.at(i) -> ignore = false;
-						//reset the ingore flag to false
-			}
-			else if(processed.find("set_time_step") != string::npos){
-				time_step = std::atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-			}
-			else if(processed.find("set_radius") != string::npos){
-				particle_radius = std::atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-			}
-			else if(processed.find("set_delay") != string::npos){
-				delay = std::stoi(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-					//integer value
-			}
-			else if(processed.find("set_theta") != string::npos){
-				theta = std::atof(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-			}
-			else if(processed.find("set_debug_upper_bound") != string::npos){
-				debug_upper_bound = std::stoi(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-			}
-			else if(processed.find("set_debug_lower_bound") != string::npos){
-				debug_lower_bound = std::stoi(substring(processed, processed.find("(")+1, processed.find(")")).c_str());
-			}
-			else if(processed.find("clear_particles") != string::npos){
-				field.clear();
-			}
-		} catch (int e){
-			cout << ">> invalid command" << endl;
 		}
 	}
 }
@@ -184,7 +186,7 @@ void tokenize_current_process(int i, int j){
 			ss.ignore();
 		}
 	}
-	if(string_builder.compare("") != 0)
+	if(string_builder.compare("") != 0)			//still more
 		tokens.push_back(string_builder);
 }
 

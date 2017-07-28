@@ -28,6 +28,7 @@ using namespace std;
 							//	in APROXIMATION from node center of mass. However, TH -> MAX may still yield an accurate theoretical result
 #define DTU "s"				//default time unit
 #define DRQ (5)
+#define DAV (1.0)			//default alpha value
 
 typedef unsigned long long ull;
 
@@ -49,6 +50,7 @@ bool debug_tree = false;
 //misc
 float  zoom              = DVR;
 float  render_quality    = DRQ;
+float  alpha             = DAV;
 double time_step         = DTS;
 double theta             = DTH;
 double width             = DFW;
