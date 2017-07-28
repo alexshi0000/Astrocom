@@ -10,6 +10,5 @@ Includes a ghetto 3D Barnes/Hut implementation with option to set open angle < 0
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%232.png "15000 particle galaxy")
 #### Spiral arm formation can be seen in this disk
 
-![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%233.png "rectangular gravity")
-#### Rectangular cluster
+
 
