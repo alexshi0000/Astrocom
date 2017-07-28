@@ -8,9 +8,3 @@ Includes a ghetto BH implementation with option to set open angle < 0.5. Improve
 <br>
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%232.png "15000 particle galaxy")
 #### Spiral arm formation can be seen in this disk
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 7414e4f4deb17faac49ac3485f6eb5986392347d
