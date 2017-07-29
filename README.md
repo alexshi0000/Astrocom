@@ -1,5 +1,5 @@
 # Astrocom
-Simple user-definable simulator rendered in real time. no strings attached, except one ...
+A simple user-definable simulator rendered in real time. no strings attached, except one ...
 
 ## Description
 Includes a BH implementation with option to set open angle > 0.5. Improves computational complexity but force calculation accuracy has been justly reduced. Good for larger scale computations with cheap hardware. If open angle <= 0.5, algorithm returns back into traditional nlogn complexity.
