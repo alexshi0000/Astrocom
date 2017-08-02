@@ -6,7 +6,7 @@ Includes a BH implementation with option to set open angle > 0.5. Improves compu
 
 ## Gallery
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%231.png "artifical spiral arms")
-#### Two artifical arms added to bulge
+#### two physical arms added to bulge
 ####
 ![alt text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%232.png "15000 particle galaxy")
-#### Spiral arm formation can be seen in this disk
+#### winding problem
