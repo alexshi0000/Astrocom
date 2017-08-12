@@ -109,6 +109,10 @@ void process(){
 						galaxy_test0();
 					else if(id == 5)
 						cube_test();
+					else if(id == 6)
+						galaxy_test1();
+					else if(id == 7)
+						galaxy_test2();
 					else
 						cout << ">> no simulation with corresponding id found" << endl;
 				}

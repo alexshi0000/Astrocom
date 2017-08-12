@@ -3,11 +3,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//mathematical
+//basic constants
 #define GC (6.673e-11)		//gravitational constant
 #define PI (3.14159265359)	//pi
 
-//conversions
+//conversions and units
 #define SD (1.0/86400.0)	//seconds to days
 #define PC (3.086e+16)		//parsec
 #define AU (1.496e+11) 		//one astronomical unit in meters(m)
@@ -47,7 +47,7 @@ float my;
 bool locked     = false;	//locked camera
 bool debug_tree = false;
 
-//misc
+//misc must be defined in prototype code
 float  zoom              = DVR;
 float  render_quality    = DRQ;
 float  alpha             = DAV;
@@ -140,6 +140,7 @@ class Particle{
 	public:
 		bool black_hole;
 		bool ignore;
+		bool focus;
 		float color[3];
 		double m,x,y,z;
 		Vect *f,*v,*a;
@@ -147,6 +148,7 @@ class Particle{
 				//mass, x, y, z, the vector components
 			black_hole = false;
 			ignore     = false;
+			focus 	   = false;
 			this -> m = m;
 			this -> x = x;
 			this -> y = y;
@@ -204,84 +206,101 @@ class Node{
 				m += a -> m;
 				cmx += a -> cmx * a -> m;
 				cmy += a -> cmy * a -> m;
+				cmz += a -> cmz * a -> m;
 			}
 			else{
 				m += a -> p -> m;
 				cmx += a -> p -> x * a -> p -> m;
 				cmy += a -> p -> y * a -> p -> m;
+				cmz += a -> p -> z * a -> p -> m;
 			} // since this function is only called on an internal node, we do not need to check for existance of octants
 			if(b -> p == NULL){
 				m += b -> m;
 				cmx += b -> cmx * b -> m;
 				cmy += b -> cmy * b -> m;
+				cmz += b -> cmz * b -> m;
 			}
 			else{
 				m += b -> p -> m;
 				cmx += b -> p -> x * b -> p -> m;
 				cmy += b -> p -> y * b -> p -> m;
+				cmz += b -> p -> z * b -> p -> m;
 			}
 			if(c -> p == NULL){
 				m += c -> m;
 				cmx += c -> cmx * c -> m;
 				cmy += c -> cmy * c -> m;
+				cmz += c -> cmz * c -> m;
 			}
 			else{
 				m += c -> p -> m;
 				cmx += c -> p -> x * c -> p -> m;
 				cmy += c -> p -> y * c -> p -> m;
+				cmz += c -> p -> z * c -> p -> m;
 			}
 			if(d -> p == NULL){
 				m += d -> m;
 				cmx += d -> cmx * d -> m;
 				cmy += d -> cmy * d -> m;
+				cmz += d -> cmz * d -> m;
 			}
 			else{
 				m += d -> p -> m;
 				cmx += d -> p -> x * d -> p -> m;
 				cmy += d -> p -> y * d -> p -> m;
+				cmz += d -> p -> z * d -> p -> m;
 			}
 			if(e -> p == NULL){
 				m += e -> m;
 				cmx += e -> cmx * e -> m;
 				cmy += e -> cmy * e -> m;
+				cmz += e -> cmz * e -> m;
 			}
 			else{
 				m += e -> p -> m;
 				cmx += e -> p -> x * e -> p -> m;
 				cmy += e -> p -> y * e -> p -> m;
+				cmz += e -> p -> z * e -> p -> m;
 			}
 			if(f -> p == NULL){
 				m += f -> m;
 				cmx += f -> cmx * f -> m;
 				cmy += f -> cmy * f -> m;
+				cmz += f -> cmz * f -> m;
 			}
 			else{
 				m += f -> p -> m;
 				cmx += f -> p -> x * f -> p -> m;
 				cmy += f -> p -> y * f -> p -> m;
+				cmz += f -> p -> z * f -> p -> m;
 			}
 			if(g -> p == NULL){
 				m += g -> m;
 				cmx += g -> cmx * g -> m;
 				cmy += g -> cmy * g -> m;
+				cmz += g -> cmz * g -> m;
 			}
 			else{
 				m += g -> p -> m;
 				cmx += g -> p -> x * g -> p -> m;
 				cmy += g -> p -> y * g -> p -> m;
+				cmz += g -> p -> z * g -> p -> m;
 			}
 			if(h -> p == NULL){
 				m += h -> m;
 				cmx += h -> cmx * h -> m;
 				cmy += h -> cmy * h -> m;
+				cmz += h -> cmz * h -> m;
 			}
 			else{
 				m += h -> p -> m;
 				cmx += h -> p -> x * h -> p -> m;
 				cmy += h -> p -> y * h -> p -> m;
+				cmz += h -> p -> z * h -> p -> m;
 			}
 			cmx = cmx / this -> m;
 			cmy = cmy / this -> m; 
+			cmz = cmz / this -> m;
 		}
 };
 

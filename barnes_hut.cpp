@@ -116,7 +116,6 @@ bool in_octant(Node *n, Particle *p){
 
 void particle_update_traversal(Node *focus, Particle *body);
 void particle_update(){
-	#pragma omp parallel for num_threads(2)
 	for(int i = 0; i < field.size(); i++){
 		Particle *p = field.at(i);
 		if(sqrt(pow(p->x-root->x,2) + pow(p->y-root->y,2) + pow(p->z-root->z,2)) > ignore_width && ignore_width > 0){
@@ -168,14 +167,7 @@ void particle_update_traversal(Node *focus, Particle *body){
 				//garbage collection
 		}
 	}
-	else if(
-			((focus -> width) / 
-			sqrt(
-				pow(body -> x - focus -> x, 2) +
-				pow(body -> y - focus -> y, 2) +
-				pow(body -> z - focus -> z, 2)
-			)) < theta)
-		{
+	else{
 			// if s/d < theta, use center of mass and total mass aproximations 
 		double temp_mass = focus -> m;
 		double temp_cmx = focus -> cmx;
@@ -201,25 +193,6 @@ void particle_update_traversal(Node *focus, Particle *body){
 		body -> f = Vect::add(temp, gravity);
 		delete temp;
 		delete gravity;
-	}
-	else{
-		if(focus -> a != NULL)
-			particle_update_traversal(focus -> a, body);
-		if(focus -> b != NULL)
-			particle_update_traversal(focus -> b, body);
-		if(focus -> c != NULL)
-			particle_update_traversal(focus -> c, body);
-		if(focus -> d != NULL)
-			particle_update_traversal(focus -> d, body);
-		if(focus -> e != NULL)
-			particle_update_traversal(focus -> e, body);
-		if(focus -> f != NULL)
-			particle_update_traversal(focus -> f, body);
-		if(focus -> g != NULL)
-			particle_update_traversal(focus -> g, body);
-		if(focus -> h != NULL)
-			particle_update_traversal(focus -> h, body);
-		//recursively visit more branches to update force from
 	}
 }
 
@@ -266,7 +239,7 @@ void display_debug_tree_traversal_util(Node *sub_root, int layer_lower_bound, in
 			//front face
 		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
 				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
+				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));     
 		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
 				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
@@ -394,7 +367,10 @@ void display_func(){
 				glColor4f(0,0,0,0);
 			glPushMatrix ();
 		        glTranslatef    (x1, y1, z1);
-		        glutSolidSphere (particle_radius, render_quality, render_quality);
+		        if(render->focus)
+		        	glutSolidSphere (particle_radius*100, render_quality, render_quality);
+		        else
+		        	glutSolidSphere (particle_radius, render_quality, render_quality);
 	   		glPopMatrix ();
 	    }
 	}
@@ -408,6 +384,8 @@ void display_func(){
     	display_text("time: "+to_string((unsigned long long)((T*SD)/365.25))+" years", 0.65, 0.95);
     else if(time_unit.compare("s") == 0)
     	display_text("time: "+to_string(T)+" seconds", 0.65, 0.95);
+    else if(time_unit.compare("m") == 0)
+    	display_text("time: "+to_string((T*SD)/(365.25*1e6))+" myrs", 0.65, 0.95);
     else
     	display_text("time: unknown unit", 0.65, 0.95);
     glColor3f(0.99,0.99,0.99);
@@ -484,7 +462,7 @@ int main(int argc, char **argv){
 	glutInit(&argc,argv);			
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(700,30);
-	glutInitWindowSize(980,980);
+	glutInitWindowSize(900,900);
 	glutCreateWindow("astrocom");
 	glutDisplayFunc(display_func);
 	glutPassiveMotionFunc(passive_func);
