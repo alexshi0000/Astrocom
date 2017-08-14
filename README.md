@@ -13,3 +13,6 @@ Includes a BH implementation with option to set open angle > 0.5. Improves compu
 ####
 ![alt_text](https://github.com/alexshi0000/Astrocom/blob/master/Screenshot%20from%202017-07-27%2023-48-04.png)
 #### density wave formation 
+
+![alt_text](https://github.com/alexshi0000/Astrocom/blob/master/github_nbody_pic%233.png)
+#### rectangle cluster
