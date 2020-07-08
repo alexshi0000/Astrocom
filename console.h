@@ -1,8 +1,93 @@
+#include <stdlib.h>
 #ifndef console
 #define console
 #include "science.h"
 #include "prototype.h"
-#include <bits/stdc++.h>
+#ifndef _GLIBCXX_NO_ASSERT
+#include <cassert>
+#endif
+#include <cctype>
+#include <cerrno>
+#include <cfloat>
+#include <ciso646>
+#include <climits>
+#include <clocale>
+#include <cmath>
+#include <csetjmp>
+#include <csignal>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
+#if __cplusplus >= 201103L
+#include <ccomplex>
+#include <cfenv>
+#include <cinttypes>
+#include <cstdbool>
+#include <cstdint>
+#include <ctgmath>
+#include <cwchar>
+#include <cwctype>
+#endif
+
+// C++
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdexcept>
+#include <streambuf>
+#include <string>
+#include <typeinfo>
+#include <utility>
+#include <valarray>
+#include <vector>
+
+#if __cplusplus >= 201103L
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <forward_list>
+#include <future>
+#include <initializer_list>
+#include <mutex>
+#include <random>
+#include <ratio>
+#include <regex>
+#include <scoped_allocator>
+#include <system_error>
+#include <thread>
+#include <tuple>
+#include <typeindex>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#endif
 using namespace std;
 	//this header file contains the console data
 void tokenize_current_process(int i, int j);
@@ -47,13 +132,13 @@ void display_help_options(){
 	cout << "- set_theta(TH)" << endl;                  //
 	cout << "- set_time_unit(s,d,y)" << endl;           //
 	cout << "- set_visualization(v)" << endl;           //
-	cout << "- set_debug_lower_bound(lo)" << endl; 
-	cout << "- set_debug_upper_bound(hi)" << endl; 
+	cout << "- set_debug_lower_bound(lo)" << endl;
+	cout << "- set_debug_upper_bound(hi)" << endl;
 	cout << "- clear()"<< endl;
 	cout << "- clear_particles()" << endl;
 	cout << "- save()" << endl;
 	cout << "- load()" << endl;
-	cout << "- debug()" << endl; 
+	cout << "- debug()" << endl;
 	cout << "    - debug_tree()" << endl;
 	cout << "    - peek(id)" << endl;
 	cout << "    - find(id,R,G,B)" << endl;
@@ -220,7 +305,7 @@ void glut_special_func(int key, int x, int y){
 
 void do_something(unsigned char key, int x, int y){
 	//keyboard functions
-	if(key == 8){
+	if(key == 127){
 		//backspace
 		if(caret == processed.length()){
 			processed = substring(processed,0,processed.length()-1);
@@ -231,7 +316,7 @@ void do_something(unsigned char key, int x, int y){
 		else if(caret > 0 && caret < processed.length()){
 			display = "~console: " + substring(processed, 0, caret-1) + " " + substring(processed, caret, processed.length());
 			processed = substring(processed, 0, caret-1) + substring(processed, caret, processed.length());
-			caret--; 
+			caret--;
 			display[caret+10] = '|';
 		}
 	}
@@ -246,6 +331,12 @@ void do_something(unsigned char key, int x, int y){
 		display[caret+10] = '|';
 			//reset for next query
 	}
+	else if(key == 45) {
+		zoom /= 1.1;
+	}
+	else if(key == 43) {
+		zoom *= 1.1;
+	}
 	else{
 		if(caret == processed.length()){
 			processed += key;
@@ -256,7 +347,7 @@ void do_something(unsigned char key, int x, int y){
 			display = "~console: " + substring(processed,0,caret) + (char)key + " "+ substring(processed,caret,processed.length());
 			processed = substring(processed,0,caret) + (char)key + substring(processed,caret,processed.length());
 			caret++;
-		}	
+		}
 		display[caret+10] = '|';
 	}
 }

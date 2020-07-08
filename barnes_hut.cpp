@@ -1,20 +1,107 @@
-#include <bits/stdc++.h>
+#include <stdlib.h>
+#ifndef _GLIBCXX_NO_ASSERT
+#include <cassert>
+#endif
+#include <cctype>
+#include <cerrno>
+#include <cfloat>
+#include <ciso646>
+#include <climits>
+#include <clocale>
+#include <cmath>
+#include <csetjmp>
+#include <csignal>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
+#if __cplusplus >= 201103L
+#include <ccomplex>
+#include <cfenv>
+#include <cinttypes>
+#include <cstdbool>
+#include <cstdint>
+#include <ctgmath>
+#include <cwchar>
+#include <cwctype>
+#endif
+
+// C++
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdexcept>
+#include <streambuf>
+#include <string>
+#include <typeinfo>
+#include <utility>
+#include <valarray>
+#include <vector>
+
+#if __cplusplus >= 201103L
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <forward_list>
+#include <future>
+#include <initializer_list>
+#include <mutex>
+#include <random>
+#include <ratio>
+#include <regex>
+#include <scoped_allocator>
+#include <system_error>
+#include <thread>
+#include <tuple>
+#include <typeindex>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#endif
 #include <GL/freeglut.h>
-#include <GL/glut.h>
-#include <GL/glu.h>
-#include <GL/gl.h>
+//#include <GL/glut.h>
+//#include <GL/gl.h>
+//#include <GL/glu.h>
 #include "science.h"	//includes the science file written for utility classes and functions
 #include "prototype.h"	//testing file data including n body simulations
 #include "console.h"	//console and ui features
-	
+
 using namespace std;
 
 bool internal(Node *focus){
-		//returns if the node is internal
-	if(focus -> a == NULL && focus -> b == NULL && focus -> c == NULL && focus -> d == NULL
-    && focus -> e == NULL && focus -> f == NULL && focus -> g == NULL && focus -> h == NULL)
-		return false;
-	return true;
+    //returns if the node is internal
+    if(focus -> a == NULL && focus -> b == NULL &&
+       focus -> c == NULL && focus -> d == NULL
+    && focus -> e == NULL && focus -> f == NULL &&
+       focus -> g == NULL && focus -> h == NULL)
+	return false;
+    return true;
 }
 
 void insert_particle(Particle *body, Node *focus);
@@ -32,7 +119,7 @@ void expand_octant(Node *octant){
 	octant -> g = new Node( width/2, height/2, length/2, x - width/4, y-height/4, z-length/4);
 	octant -> h = new Node( width/2, height/2, length/2, x + width/4, y-height/4, z-length/4);
 }
-	
+
 void insert_to_octant(Particle *body, Node *focus){
 	//choose the branch of the octree to traverse, this is ONLY a re-direction function
 	if(abs(body -> x) > root -> width || abs(body -> y) > root -> height || abs(body -> z) > root -> length)
@@ -49,7 +136,7 @@ void insert_to_octant(Particle *body, Node *focus){
 		else{
 			if(body -> z >= focus -> z)
 				insert_particle(body,focus -> d);
-			else 
+			else
 				insert_particle(body,focus -> h);
 		}
 	}
@@ -82,7 +169,7 @@ void insert_particle(Particle *body, Node *focus){
 		expand_octant(focus);
 			//creates eight branches that will represent the expansion
 		Particle *body_a = body;
-		Particle *body_b = focus -> p;			
+		Particle *body_b = focus -> p;
 			//reference two seperate particles and add in recursively
 		focus -> p = NULL;
 			//focus pointer points to NULL, body_b has reference to original particle
@@ -96,21 +183,21 @@ void insert_particle(Particle *body, Node *focus){
 void build_tree(double w, double h, double l){
 		//w,h,l must be the sane in magnitude
 	delete root;
-		//root and its subtrees will be deleted recursively 
+		//root and its subtrees will be deleted recursively
 	root = new Node(w,h,l,0,0,0);
 	for(int i = 0; i < field.size(); i++)
-		insert_particle(field.at(i),root);	
+		insert_particle(field.at(i),root);
 			//add particles in the field to the octree
 }
 
 bool in_octant(Node *n, Particle *p){
 	//checks if the given aprticle is in the given node, if so it is advised to delete mass
-	return 
-	   p -> x <= n -> x + n -> width/2 && 
-	   p -> x >= n -> x - n -> width/2 && 
-	   p -> y <= n -> y + n -> width/2 && 
-	   p -> y >= n -> y - n -> width/2 && 
-	   p -> z <= n -> z + n -> width/2 && 
+	return
+	   p -> x <= n -> x + n -> width/2 &&
+	   p -> x >= n -> x - n -> width/2 &&
+	   p -> y <= n -> y + n -> width/2 &&
+	   p -> y >= n -> y - n -> width/2 &&
+	   p -> z <= n -> z + n -> width/2 &&
 	   p -> z >= n -> z - n -> width/2;
 }
 
@@ -135,15 +222,15 @@ void particle_update(){
 			//acceleration is in the same direction as the net force
 		p -> a -> scalar( (p -> f -> m / p -> m) * time_step);
 			//force magnitude / mass multiplied by the timestep, TS
-		double v_i = p -> v -> i, 
-			   v_j = p -> v -> j, 
+		double v_i = p -> v -> i,
+			   v_j = p -> v -> j,
 			   v_k = p -> v -> k;
 		delete p -> v;
 		Vect *curr_vel = new Vect(v_i,v_j,v_k);
 		p -> v = Vect::add(curr_vel, p -> a);
 		delete curr_vel;
 			//vector addition of copy velocity and acceleration
-		p -> x = p -> v -> i * time_step + p -> x; 
+		p -> x = p -> v -> i * time_step + p -> x;
 		p -> y = p -> v -> j * time_step + p -> y;
 		p -> z = p -> v -> k * time_step + p -> z;
 			//update the velocity and displacement vect
@@ -154,7 +241,7 @@ void particle_update_traversal(Node *focus, Particle *body){
 	if(!internal(focus) && focus -> p != NULL && focus -> p != body){
 		if(body -> x != focus -> p -> x || body -> y != focus -> p -> y || body -> z != focus -> p -> z){
 			Vect *gravity = new Vect(focus -> p -> x - body -> x, focus -> p -> y - body -> y, focus -> p -> z - body -> z);
-			gravity -> scalar( 
+			gravity -> scalar(
 			    ( GC * body -> m * focus -> p -> m ) /
 				( pow(focus -> p -> x - body -> x, 2) + pow(focus -> p -> y - body -> y, 2) + pow(focus -> p -> z - body -> z, 2) )
 			);
@@ -168,7 +255,7 @@ void particle_update_traversal(Node *focus, Particle *body){
 		}
 	}
 	else{
-			// if s/d < theta, use center of mass and total mass aproximations 
+		// if s/d < theta, use center of mass and total mass aproximations
 		double temp_mass = focus -> m;
 		double temp_cmx = focus -> cmx;
 		double temp_cmy = focus -> cmy;
@@ -212,79 +299,79 @@ void display_debug_tree_traversal_util(Node *sub_root, int layer_lower_bound, in
 	if(sub_root == NULL || layer_current > layer_upper_bound)
 		return;
 	if(layer_current <= layer_upper_bound && layer_current >= layer_lower_bound){
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
 			//front face
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));     
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
 			//back face
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x + sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y + sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z + sub_root -> width / 2) / (root -> width * zoom));
-		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom), 
-				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom), 
+		glVertex3f((sub_root -> x - sub_root -> width / 2) / (root -> width * zoom),
+				   (sub_root -> y - sub_root -> width / 2) / (root -> width * zoom),
 				   (sub_root -> z - sub_root -> width / 2) / (root -> width * zoom));
 			//sides
 	}
@@ -335,7 +422,7 @@ void additive_blend(){
 void display_func(){
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
-	glMatrixMode(GL_PROJECTION); 
+	glMatrixMode(GL_PROJECTION);
 		//set matrix to modelview
 	glRotatef(my*200,1.0,0.0,0.0);
     glRotatef(mx*200,0.0,1.0,0.0);
@@ -358,7 +445,7 @@ void display_func(){
 	    	if(render -> color[0] < 0.001 && render -> color[1] < 0.001 && render -> color[2] < 0.001)
 	    		continue;
 	    	float x1,y1,z1;
-			x1 = render -> x / (root -> width * zoom);	
+			x1 = render -> x / (root -> width * zoom);
 			y1 = render -> y / (root -> width * zoom);
 			z1 = render -> z / (root -> width * zoom);
 				//divided by camera dimensions
@@ -414,7 +501,7 @@ void display_func(){
 void physics(int data){
 	if(field.size() < 0)
 		return;
-	glutTimerFunc(delay, physics, -1); 
+	glutTimerFunc(delay, physics, -1);
 	build_tree(width, width, width);
     particle_update();
     T += time_step;
@@ -423,11 +510,11 @@ void physics(int data){
 
 void scroll_func(int button, int state, int x, int y){
    	if ((button == 3) || (button == 4)){
-		if (button == 3 && state == GLUT_UP) 
+		if (button == 3 && state == GLUT_UP)
 			zoom *= 1.1;
-		if (state == GLUT_DOWN && button == 4)  
+		if (state == GLUT_DOWN && button == 4)
 			zoom /= 1.1;
-   	} 
+   	}
    	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
    		locked = !locked;
 }
@@ -439,27 +526,27 @@ void passive_func(int x, int y){
 	    my = y;
 	    my = (my/glutGet(GLUT_WINDOW_WIDTH)) - 0.5f;
 	    mx = -((mx/glutGet(GLUT_WINDOW_HEIGHT)) - 0.5f);
-		//converting into usable coordinates	
+		//converting into usable coordinates
 	}
-} 
+}
 
 void reshape(int x, int y){
 	//reshaping the window
-    if (y == 0 || x == 0) return;   
-    glMatrixMode(GL_PROJECTION);  
-    glLoadIdentity(); 
+    if (y == 0 || x == 0) return;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     gluPerspective(39.0,(GLdouble)x/(GLdouble)y,0.6,21.0);
     glMatrixMode(GL_MODELVIEW);
-    glViewport(0,0,x,y);  
+    glViewport(0,0,x,y);
 }
 
 int main(int argc, char **argv){
-	srand(time(NULL)); 
+	srand(time(NULL));
 	user_def();
 	if(field.size() >= 0)
 		build_tree(width, width, width);
-		//build octree 
-	glutInit(&argc,argv);			
+		//build octree
+	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(700,30);
 	glutInitWindowSize(900,900);
@@ -467,7 +554,7 @@ int main(int argc, char **argv){
 	glutDisplayFunc(display_func);
 	glutPassiveMotionFunc(passive_func);
 	glutMouseFunc(scroll_func);
-	glutTimerFunc(delay, physics, -1); 
+	glutTimerFunc(delay, physics, -1);
 	glutKeyboardFunc(do_something);
 	glutSpecialFunc(glut_special_func);
 	glutReshapeFunc(reshape);

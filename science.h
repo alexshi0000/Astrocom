@@ -1,6 +1,91 @@
+#include <stdlib.h>
 #ifndef science				//this is our global header file
 #define science
-#include <bits/stdc++.h>
+#ifndef _GLIBCXX_NO_ASSERT
+#include <cassert>
+#endif
+#include <cctype>
+#include <cerrno>
+#include <cfloat>
+#include <ciso646>
+#include <climits>
+#include <clocale>
+#include <cmath>
+#include <csetjmp>
+#include <csignal>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+
+#if __cplusplus >= 201103L
+#include <ccomplex>
+#include <cfenv>
+#include <cinttypes>
+#include <cstdbool>
+#include <cstdint>
+#include <ctgmath>
+#include <cwchar>
+#include <cwctype>
+#endif
+
+// C++
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iosfwd>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+#include <memory>
+#include <new>
+#include <numeric>
+#include <ostream>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <stdexcept>
+#include <streambuf>
+#include <string>
+#include <typeinfo>
+#include <utility>
+#include <valarray>
+#include <vector>
+
+#if __cplusplus >= 201103L
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <forward_list>
+#include <future>
+#include <initializer_list>
+#include <mutex>
+#include <random>
+#include <ratio>
+#include <regex>
+#include <scoped_allocator>
+#include <system_error>
+#include <thread>
+#include <tuple>
+#include <typeindex>
+#include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
+#endif
 using namespace std;
 
 //basic constants
@@ -19,12 +104,12 @@ using namespace std;
 #define DVR (1)				//default view zoom
 #define DFW (20*AU)			//default width
 #define DPR (0.003)			//default particle radius
-#define DIW (-1)			//default igonre width	
+#define DIW (-1)			//default igonre width
 #define DLB (0)             //default lower bound for recursion tree
 #define DUB (1000)          //default upper bound for recursion tree
 #define DLY	(30)			//default delay
-#define DTH (0.5)   		
-							//	default opening angle constant, default value is 0.5 because the particles are sufficiently far enough to not be included 
+#define DTH (0.5)
+							//	default opening angle constant, default value is 0.5 because the particles are sufficiently far enough to not be included
 							//	in APROXIMATION from node center of mass. However, TH -> MAX may still yield an accurate theoretical result
 #define DTU "s"				//default time unit
 #define DRQ (5)
@@ -73,7 +158,7 @@ class Point {
 		void rotate(double u, double v, double w, double angle){
 			//rotate on axis defined by the vector units i,j,k representing x,y,z axis
 			double x = this -> x, y = this -> y, z = this -> z;
-			double cos_p = cos(angle); 
+			double cos_p = cos(angle);
 			double sin_p = sin(angle);
 			double x_prime = u*(u*x + v*y + w*z)*(1-cos_p) + x*cos_p + (-w*y + v*z) * sin_p;
 			double y_prime = v*(u*x + v*y + w*z)*(1-cos_p) + y*cos_p + ( w*x - u*z) * sin_p;
@@ -122,7 +207,7 @@ class Vect{
 			unitVect -> scalar(1);
 			return unitVect;
 		}
-		static Vect* crossProduct(Vect *u, Vect *v){									
+		static Vect* crossProduct(Vect *u, Vect *v){
 				//returns a vec pointer that is perpendicular to both u and v, the normal
 			Vect *resultant = new Vect(0,0,0);
 			resultant -> i = u -> j * v -> k - u -> k * v -> j;
@@ -165,7 +250,7 @@ class Particle{
 			this -> color[0] = r;
 			this -> color[1] = g;
 			this -> color[2] = b;
-		} 
+		}
 };
 
 class Node{
@@ -174,7 +259,7 @@ class Node{
 			//since the node is representing a 3d quad, width, length and height are the same in magnitude
 		Node *a, *b, *c, *d, *e, *f, *g, *h;
 		Particle *p;
-		Node(double width, double height, double length, double x, double y, double z){ 
+		Node(double width, double height, double length, double x, double y, double z){
 			this -> width = width;
 			this -> height = height;
 			this -> length = length;
@@ -185,17 +270,17 @@ class Node{
 			this -> cmx = 0;
 			this -> cmy = 0;
 			this -> cmz = 0;
-			p = NULL, a = NULL, b = NULL, c = NULL, d = NULL, 
+			p = NULL, a = NULL, b = NULL, c = NULL, d = NULL,
 			e = NULL, f = NULL, g = NULL, h = NULL;
-				//no octants formed nor any particle added 
+				//no octants formed nor any particle added
 			OCTANT++;
 				//include ocatant count
-		}	
+		}
 		~Node(){
 			OCTANT--;
 				//remove octant count
 			delete a, delete b, delete c, delete d, delete e, delete f, delete g, delete h;
-			a = NULL, b = NULL, c = NULL, d = NULL, 
+			a = NULL, b = NULL, c = NULL, d = NULL,
 			e = NULL, f = NULL, g = NULL, h = NULL;
 				//set to null to prevent undefined behaviour, pointers will be compared. subtrees are deleted recursively
 		}
@@ -299,7 +384,7 @@ class Node{
 				cmz += h -> p -> z * h -> p -> m;
 			}
 			cmx = cmx / this -> m;
-			cmy = cmy / this -> m; 
+			cmy = cmy / this -> m;
 			cmz = cmz / this -> m;
 		}
 };
